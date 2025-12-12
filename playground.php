@@ -1,6 +1,7 @@
 <?php
 
 use PXP\Matrix\Matrix;
+use PXP\Matrix\Vector;
 
 require __DIR__.'/vendor/autoload.php';
 
@@ -18,4 +19,6 @@ $B = new Matrix([
     [1, 4, 5, 0],
 ]);
 
-echo $A, $B, $A->times($B);
+$c = new Vector([1, 5, 7, 4]);
+
+echo join("\n", [$A, $B, $c, $A->times($B), $c->t()->times($A), $B->times($c), $c->inner($c), $c->outer($c)]);
