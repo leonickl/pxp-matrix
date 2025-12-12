@@ -173,6 +173,11 @@ readonly class Matrix
         return new Matrix($matrix, check: false);
     }
 
+    public function t(): Matrix
+    {
+        return $this->transpose();
+    }
+
     public function invert(): Matrix
     {
         if (! $this->squared()) {
