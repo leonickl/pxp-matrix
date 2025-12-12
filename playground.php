@@ -21,4 +21,11 @@ $B = new Matrix([
 
 $c = new Vector([1, 5, 7, 4]);
 
-echo join("\n", [$A, $B, $c, $A->times($B), $c->t()->times($A), $B->times($c), $c->inner($c), $c->outer($c)]);
+echo join("\n", [
+    $A, $B, $c,
+    $A->times($B),
+    $c->t()->times($A),
+    $B->times($c),
+    $c->inner($c),
+    $c->outer($c),
+]);
