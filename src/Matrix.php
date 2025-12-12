@@ -85,6 +85,22 @@ readonly class Matrix
         return new Matrix($matrix, check: false);
     }
 
+    public function row(int $i): array
+    {
+        return $this->matrix[$i];
+    }
+
+    public function col(int $j): array
+    {
+        $col = [];
+
+        foreach ($this->matrix as $row) {
+            $col[] = $row[$j];
+        }
+
+        return $col;
+    }
+
     public function det(): float
     {
         if (! $this->squared()) {
@@ -199,6 +215,36 @@ readonly class Matrix
 
             foreach ($row as $j => $element) {
                 $line[] = $action($element);
+            }
+
+            $matrix[] = $line;
+        }
+
+        return new Matrix($matrix, check: false);
+    }
+
+    public function times(Matrix $other): Matrix
+    {
+        if ($this->width() !== $other->height()) {
+            throw new Exception('Can only multiply matrices when width of first is height of second');
+        }
+
+        $matrix = [];
+
+        for ($i = 0; $i < $this->height(); $i++) {
+            $line = [];
+
+            for ($j = 0; $j < $this->width(); $j++) {
+                $row = $this->row($i);
+                $col = $other->col($j);
+
+                $sum = 0;
+
+                for ($pos = 0; $pos < count($row); $pos++) {
+                    $sum += $row[$pos] * $col[$pos];
+                }
+
+                $line[] = $sum;
             }
 
             $matrix[] = $line;
