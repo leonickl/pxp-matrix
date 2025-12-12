@@ -1,5 +1,5 @@
 {
-    "name": "leo/pxp-matrix",
+    "name": "leonickl/pxp-matrix",
     "type": "project",
     "autoload": {
         "psr-4": {
