@@ -1,0 +1,19 @@
+{
+    "name": "leo/pxp-matrix",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "PXP\\Matrix\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Leo Nickl",
+            "email": "leol@leonickl.de"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "php": ">=8.4"
+    }
+}

@@ -1,0 +1,209 @@
+<?php
+
+namespace PXP\Matrix;
+
+use Exception;
+
+readonly class Matrix
+{
+    public function __construct(private array $matrix, bool $check = true)
+    {
+        if ($check) {
+            $this->check($matrix);
+        }
+    }
+
+    public static function fromFlat(array $elements, int $width)
+    {
+        return new Matrix(array_chunk($elements, $width));
+    }
+
+    private function check(array $matrix): void
+    {
+        $width = null;
+
+        foreach ($matrix as $row) {
+            if ($width === null) {
+                $width = count($row);
+
+                continue;
+            }
+
+            if ($width !== count($row)) {
+                throw new Exception('Matrix rows must have same length');
+            }
+        }
+    }
+
+    public function height(): int
+    {
+        return count($this->matrix);
+    }
+
+    public function width(): int
+    {
+        return count($this->matrix) === 0 ? 0 : count($this->matrix[0]);
+    }
+
+    public function dim(): array
+    {
+        return [$this->height(), $this->width()];
+    }
+
+    public function squared(): bool
+    {
+        return $this->height() === $this->width();
+    }
+
+    public function get(int $row, int $col): float
+    {
+        if ($row >= $this->height()) {
+            throw new Exception('Row index out of bounds');
+        }
+
+        if ($col >= $this->width()) {
+            throw new Exception('Col index out of bounds');
+        }
+
+        return $this->matrix[$row][$col] ?? null;
+    }
+
+    public function without(int $row, int $col): Matrix
+    {
+        $matrix = [];
+
+        foreach ($this->matrix as $i => $line) {
+            if ($i === $row) {
+                continue;
+            }
+
+            array_splice($line, $col, 1);
+
+            $matrix[] = $line;
+        }
+
+        return new Matrix($matrix, check: false);
+    }
+
+    public function det(): float
+    {
+        if (! $this->squared()) {
+            throw new Exception('Determinant only defined for square matrices');
+        }
+
+        if ($this->width() === 1) {
+            return $this->get(0, 0);
+        }
+
+        if ($this->width() === 2) {
+            return $this->get(0, 0) * $this->get(1, 1)
+                - $this->get(0, 1) * $this->get(1, 0);
+        }
+
+        // Laplace for first row (row = 0)
+
+        $i = 0;
+
+        $det = 0;
+
+        for ($j = 0; $j < $this->width(); $j++) {
+            $det += (-1) ** ($j + $i) * $this->get($i, $j)
+                * $this->without($i, $j)->det();
+        }
+
+        return $det;
+    }
+
+    public function __toString(): string
+    {
+        $max = 0;
+
+        foreach ($this->matrix as $row) {
+            foreach ($row as $element) {
+                $max = max($max, strlen((string) $element));
+            }
+        }
+
+        $string = '';
+
+        foreach ($this->matrix as $row) {
+            $line = '';
+
+            foreach ($row as $element) {
+                $pad = str_repeat(' ', $max - strlen((string) $element));
+                $line .= ($line === '' ? '' : ' ').$pad.$element;
+            }
+
+            $string .= ($string === '' ? '' : "\n").$line;
+        }
+
+        return $string."\n";
+    }
+
+    public function transpose(): Matrix
+    {
+        $matrix = [];
+
+        for ($j = 0; $j < $this->width(); $j++) {
+            $line = [];
+
+            for ($i = 0; $i < $this->height(); $i++) {
+                $line[] = $this->get($i, $j);
+            }
+
+            $matrix[] = $line;
+        }
+
+        return new Matrix($matrix, check: false);
+    }
+
+    public function invert(): Matrix
+    {
+        if (! $this->squared()) {
+            throw new Exception('Determinant only defined for square matrices');
+        }
+
+        $matrix = [];
+
+        foreach ($this->matrix as $i => $row) {
+            $line = [];
+
+            foreach ($row as $j => $element) {
+                $line[] = (-1) ** ($i + $j) * $this->without($i, $j)->det();
+            }
+
+            $matrix[] = $line;
+        }
+
+        return new Matrix($matrix, check: false)
+            ->transpose()
+            ->scalar(1 / $this->det());
+    }
+
+    public function scalar(float $scalar)
+    {
+        return $this->map(fn ($element) => $element * $scalar);
+    }
+
+    public function round(int $decimals)
+    {
+        return $this->map(fn ($element) => round($element, $decimals));
+    }
+
+    public function map(callable $action): Matrix
+    {
+        $matrix = [];
+
+        foreach ($this->matrix as $i => $row) {
+            $line = [];
+
+            foreach ($row as $j => $element) {
+                $line[] = $action($element);
+            }
+
+            $matrix[] = $line;
+        }
+
+        return new Matrix($matrix, check: false);
+    }
+}
