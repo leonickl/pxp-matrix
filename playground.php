@@ -28,4 +28,6 @@ echo join("\n", [
     $B->times($c),
     $c->inner($c),
     $c->outer($c),
+    $A->plus($B),
+    $A->minus($B),
 ]);

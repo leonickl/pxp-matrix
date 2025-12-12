@@ -276,4 +276,31 @@ readonly class Matrix
     {
         return $this->matrix;
     }
+
+    public function plus(Matrix $other): Matrix
+    {
+        if ($this->width() !== $other->width()
+            || $this->height() !== $other->height()) {
+            throw new Exception('Can only add matrices of same dimensions');
+        }
+
+        $matrix = [];
+
+        for ($i = 0; $i < $this->height(); $i++) {
+            $line = [];
+
+            for ($j = 0; $j < $this->width(); $j++) {
+                $line[] = $this->get($i, $j) + $other->get($i, $j);
+            }
+
+            $matrix[] = $line;
+        }
+
+        return new Matrix($matrix, check: false);
+    }
+
+    public function minus(Matrix $other): Matrix
+    {
+        return $this->plus($other->scalar(-1));
+    }
 }
