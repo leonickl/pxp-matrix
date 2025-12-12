@@ -239,7 +239,7 @@ readonly class Matrix
         for ($i = 0; $i < $this->height(); $i++) {
             $line = [];
 
-            for ($j = 0; $j < $this->width(); $j++) {
+            for ($j = 0; $j < $other->width(); $j++) {
                 $row = $this->row($i);
                 $col = $other->col($j);
 
