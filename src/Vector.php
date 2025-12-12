@@ -24,4 +24,9 @@ readonly class Vector extends Matrix
     {
         return $this->times($other->t());
     }
+
+    public function length(): int
+    {
+        return $this->height();
+    }
 }
