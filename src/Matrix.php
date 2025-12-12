@@ -3,6 +3,7 @@
 namespace PXP\Matrix;
 
 use Exception;
+use PXP\Matrix\Vector;
 
 readonly class Matrix
 {
@@ -256,5 +257,23 @@ readonly class Matrix
         }
 
         return new Matrix($matrix, check: false);
+    }
+
+    public function vector(): Vector
+    {
+        if($this->width() === 1) {
+            return new Vector($this->col(0));
+        }
+
+        if($this->height() === 1) {
+            return new Vector($this->row(0));
+        }
+
+        throw new Exception('Matrix is not a vector');
+    }
+
+    public function raw(): array
+    {
+        return $this->matrix;
     }
 }
