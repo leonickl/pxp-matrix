@@ -3,9 +3,9 @@
 use PXP\Matrix\Vector;
 use PXP\Matrix\Matrix;
 
-function matrix(array $matrix)
+function matrix(array $matrix, ?array $columns = null, ?array $index = null)
 {
-    return new Matrix($matrix);
+    return new Matrix($matrix, columns: $columns, index: $index);
 }
 
 function vector(array $vector)

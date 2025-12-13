@@ -7,10 +7,25 @@ use PXP\Matrix\Vector;
 
 readonly class Matrix
 {
-    public function __construct(private array $matrix, bool $check = true)
-    {
+    private array $columns;
+    private array $index;
+
+    public function __construct(
+        private array $matrix, 
+        bool $check = true, 
+        ?array $columns = null, 
+        ?array $index = null,
+    ) {
         if ($check) {
             $this->check($matrix);
+        }
+
+        if($columns) {
+            $this->columns($columns);
+        }
+
+        if($index) {
+            $this->index($index);
         }
     }
 
@@ -147,10 +162,37 @@ readonly class Matrix
             }
         }
 
+        if(isset($this->columns)) {
+            foreach($this->columns as $name) {
+                $max = max($max, strlen((string) $name));
+            }
+        }
+        
+        if(isset($this->index)) {
+            foreach($this->index ?? [] as $name) {
+                $max = max($max, strlen((string) $name));
+            }
+        }
+
         $string = '';
 
-        foreach ($this->matrix as $row) {
+        if(isset($this->columns)) {
             $line = '';
+
+            foreach($this->columns as $name) {
+                $pad = str_repeat(' ', $max - strlen((string) $name));
+                $line .= ($line === '' ? (isset($this->index) ? str_repeat(' ', $max + 1) : '') : ' ').$pad.$name;
+            }
+
+            $string .= $line;
+        }
+
+        foreach ($this->matrix as $i => $row) {
+            $line = '';
+
+            if(isset($this->index)) {
+                $row = [$this->index[$i], ...$row];
+            }
 
             foreach ($row as $element) {
                 $pad = str_repeat(' ', $max - strlen((string) $element));
@@ -308,5 +350,39 @@ readonly class Matrix
     public function minus(Matrix $other): Matrix
     {
         return $this->plus($other->scalar(-1));
+    }
+
+    public function columns(array $names): Matrix
+    {
+        if(count($names) !== $this->width()) {
+            throw new Exception('Column names have wrong size');
+        }
+
+        foreach($names as $name) {
+            if(! is_int($name) && ! is_string($name)) {
+                throw new Exception('Only int and string is allowed as column name');
+            }
+        }
+
+        $this->columns = $names;
+
+        return $this;
+    }
+
+    public function index(array $names): Matrix
+    {
+        if(count($names) !== $this->height()) {
+            throw new Exception('Index names have wrong size');
+        }
+
+        foreach($names as $name) {
+            if(! is_int($name) && ! is_string($name)) {
+                throw new Exception('Only int and string is allowed as index name');
+            }
+        }
+
+        $this->index = $names;
+
+        return $this;
     }
 }
