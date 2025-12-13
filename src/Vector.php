@@ -51,4 +51,9 @@ readonly class Vector extends Matrix
         $mean = $this->mean();
         return $this->map(fn($entry) => ($entry - $mean) ** 2)->vector()->sum();
     }
+
+    public function map(callable $action): Vector
+    {
+        return parent::map($action)->vector();
+    }
 }

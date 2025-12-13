@@ -263,7 +263,7 @@ readonly class Matrix
         return $this->map(fn ($element) => round($element, $decimals));
     }
 
-    public function map(callable $action): static
+    public function map(callable $action): Matrix
     {
         $matrix = [];
 
@@ -277,7 +277,7 @@ readonly class Matrix
             $matrix[] = $line;
         }
 
-        return new static($matrix, check: false);
+        return new Matrix($matrix, check: false);
     }
 
     public function times(Matrix $other): Matrix
