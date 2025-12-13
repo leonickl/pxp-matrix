@@ -4,7 +4,10 @@
     "autoload": {
         "psr-4": {
             "PXP\\Matrix\\": "src/"
-        }
+        },
+        "files": [
+            "functions.php"
+        ]
     },
     "authors": [
         {
