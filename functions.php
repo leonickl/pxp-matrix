@@ -1,7 +1,7 @@
 <?php
 
-use PXP\Matrix\Vector;
-use PXP\Matrix\Matrix;
+use LeoNickl\Matrix\Vector;
+use LeoNickl\Matrix\Matrix;
 
 function matrix(array $matrix, ?array $columns = null, ?array $index = null)
 {

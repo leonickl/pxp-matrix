@@ -1,9 +1,9 @@
 <?php
 
-namespace PXP\Matrix;
+namespace LeoNickl\Matrix;
 
 use Exception;
-use PXP\Matrix\Vector;
+use LeoNickl\Matrix\Vector;
 
 readonly class Matrix
 {

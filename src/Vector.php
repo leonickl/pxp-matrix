@@ -1,6 +1,6 @@
 <?php
 
-namespace PXP\Matrix;
+namespace LeoNickl\Matrix;
 
 use Exception;
 

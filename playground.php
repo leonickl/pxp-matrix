@@ -1,7 +1,7 @@
 <?php
 
-use PXP\Matrix\Matrix;
-use PXP\Matrix\Vector;
+use LeoNickl\Matrix\Matrix;
+use LeoNickl\Matrix\Vector;
 
 require __DIR__.'/vendor/autoload.php';
 
