@@ -147,23 +147,24 @@ readonly class Matrix
 
     public function __toString(): string
     {
-        $max = 0;
+        $maxIndex = 0;
+        $max = [];
 
-        foreach ($this->matrix as $row) {
-            foreach ($row as $element) {
-                $max = max($max, strlen((string) $element));
+        foreach ($this->matrix as $i => $row) {
+            foreach ($row as $j => $entry) {
+                $max[$j] = max($max[$j] ?? 0, strlen((string) $entry));
             }
         }
 
         if (isset($this->columns)) {
-            foreach ($this->columns as $name) {
-                $max = max($max, strlen((string) $name));
+            foreach ($this->columns as $j => $name) {
+                $max[$j] = max($max[$j], strlen((string) $name));
             }
         }
 
         if (isset($this->index)) {
             foreach ($this->index ?? [] as $name) {
-                $max = max($max, strlen((string) $name));
+                $maxIndex = max($maxIndex, strlen((string) $name));
             }
         }
 
@@ -172,9 +173,9 @@ readonly class Matrix
         if (isset($this->columns)) {
             $line = '';
 
-            foreach ($this->columns as $name) {
-                $pad = str_repeat(' ', $max - strlen((string) $name));
-                $line .= ($line === '' ? (isset($this->index) ? str_repeat(' ', $max + 1) : '') : ' ').$pad.$name;
+            foreach ($this->columns as $j => $name) {
+                $pad = str_repeat(' ', $max[$j] - strlen((string) $name));
+                $line .= ($line === '' ? (isset($this->index) ? str_repeat(' ', $maxIndex + 1) : '') : ' ').$pad.$name;
             }
 
             $string .= $line;
@@ -184,11 +185,12 @@ readonly class Matrix
             $line = '';
 
             if (isset($this->index)) {
-                $row = [$this->index[$i], ...$row];
+                $pad = str_repeat(' ', $maxIndex - strlen((string) $this->index[$i]));
+                $line .= $pad.$this->index[$i];
             }
 
-            foreach ($row as $element) {
-                $pad = str_repeat(' ', $max - strlen((string) $element));
+            foreach ($row as $j => $element) {
+                $pad = str_repeat(' ', $max[$j] - strlen((string) $element));
                 $line .= ($line === '' ? '' : ' ').$pad.$element;
             }
 
