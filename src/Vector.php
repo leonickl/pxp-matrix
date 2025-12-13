@@ -29,4 +29,26 @@ readonly class Vector extends Matrix
     {
         return $this->height();
     }
+
+    public function sum(): float
+    {
+        return array_sum($this->col(0));
+    }
+
+    public function mean(int $ddof = 0): float
+    {
+        return $this->sum() / ($this->length() - $ddof);
+    }
+
+    public function variance(int $ddof = 0): float
+    {
+        $mean = $this->mean();
+        return $this->map(fn($entry) => ($entry - $mean) ** 2)->vector()->mean($ddof);
+    }
+
+    public function variation(): float
+    {
+        $mean = $this->mean();
+        return $this->map(fn($entry) => ($entry - $mean) ** 2)->vector()->sum();
+    }
 }
