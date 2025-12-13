@@ -352,8 +352,12 @@ readonly class Matrix
         return $this->plus($other->scalar(-1));
     }
 
-    public function columns(array $names): Matrix
+    public function columns(?array $names = null): Matrix|array
     {
+        if($names === null) {
+            return $this->columns;
+        }
+
         if(count($names) !== $this->width()) {
             throw new Exception('Column names have wrong size');
         }
@@ -369,8 +373,12 @@ readonly class Matrix
         return $this;
     }
 
-    public function index(array $names): Matrix
+    public function index(?array $names = null): Matrix|array
     {
+        if($names === null) {
+            return $this->index;
+        }
+
         if(count($names) !== $this->height()) {
             throw new Exception('Index names have wrong size');
         }
