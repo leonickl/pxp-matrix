@@ -1,9 +1,9 @@
 {
-    "name": "leonickl/pxp-matrix",
+    "name": "leonickl/matrix",
     "type": "project",
     "autoload": {
         "psr-4": {
-            "PXP\\Matrix\\": "src/"
+            "LeoNickl\\Matrix\\": "src/"
         },
         "files": [
             "functions.php"
