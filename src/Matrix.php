@@ -310,11 +310,11 @@ readonly class Matrix
     public function vector(): Vector
     {
         if($this->width() === 1) {
-            return new Vector($this->col(0));
+            return new Vector($this->col(0), check: false);
         }
 
         if($this->height() === 1) {
-            return new Vector($this->row(0));
+            return new Vector($this->row(0), check: false);
         }
 
         throw new Exception('Matrix is not a vector');
@@ -384,5 +384,20 @@ readonly class Matrix
         $this->index = $names;
 
         return $this;
+    }
+
+    public function diag(): Vector
+    {
+        if (! $this->squared()) {
+            throw new Exception('Determinant only defined for square matrices');
+        }
+
+        $vector = [];
+
+        for($i = 0; $i < $this->width(); $i++) {
+            $vector[] = $this->get($i, $i);
+        }
+
+        return new Vector($vector, check: false);
     }
 }
