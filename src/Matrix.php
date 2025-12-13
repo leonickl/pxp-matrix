@@ -29,7 +29,7 @@ readonly class Matrix
         }
     }
 
-    public static function fromFlat(array $elements, int $width)
+    public static function fromFlat(array $elements, int $width): Matrix
     {
         return new Matrix(array_chunk($elements, $width));
     }
@@ -77,7 +77,10 @@ readonly class Matrix
         return $this->height() === $this->width();
     }
 
-    public function get(int $row, int $col): int|float|null
+    /**
+     * Can also return strings if the matrix was not checked on creation
+     */
+    public function get(int $row, int $col): int|float|null|string
     {
         if ($row >= $this->height()) {
             throw new Exception('Row index out of bounds');
@@ -250,17 +253,17 @@ readonly class Matrix
             ->scalar(1 / $this->det());
     }
 
-    public function scalar(float $scalar)
+    public function scalar(float $scalar): static
     {
         return $this->map(fn ($element) => $element * $scalar);
     }
 
-    public function round(int $decimals)
+    public function round(int $decimals): static
     {
         return $this->map(fn ($element) => round($element, $decimals));
     }
 
-    public function map(callable $action): Matrix
+    public function map(callable $action): static
     {
         $matrix = [];
 
@@ -352,7 +355,7 @@ readonly class Matrix
         return $this->plus($other->scalar(-1));
     }
 
-    public function columns(?array $names = null): Matrix|array
+    public function columns(?array $names = null): static|array
     {
         if($names === null) {
             return $this->columns;
@@ -373,7 +376,7 @@ readonly class Matrix
         return $this;
     }
 
-    public function index(?array $names = null): Matrix|array
+    public function index(?array $names = null): static|array
     {
         if($names === null) {
             return $this->index;
