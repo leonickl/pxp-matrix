@@ -6,7 +6,7 @@ use Exception;
 
 readonly class Vector extends Matrix
 {
-    public function __construct(private array $vector, bool $check = true)
+    public function __construct(array $vector, bool $check = true)
     {
         parent::__construct(array_map(fn($entry) => [$entry], $vector), $check);
 
