@@ -1,8 +1,5 @@
 <?php
 
-use LeoNickl\Matrix\Matrix;
-use LeoNickl\Matrix\Vector;
-
 require __DIR__.'/vendor/autoload.php';
 
 $A = matrix([
@@ -23,7 +20,7 @@ $B = matrix([
 
 $c = vector([1, 5, 7, 4]);
 
-echo join("\n", [
+echo implode("\n", [
     $A, $B, $c,
     $A->times($B),
     $c->t()->times($A),

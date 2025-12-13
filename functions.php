@@ -1,7 +1,7 @@
 <?php
 
-use LeoNickl\Matrix\Vector;
 use LeoNickl\Matrix\Matrix;
+use LeoNickl\Matrix\Vector;
 
 function matrix(array $matrix, bool $check = true)
 {

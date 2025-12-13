@@ -3,15 +3,15 @@
 namespace LeoNickl\Matrix;
 
 use Exception;
-use LeoNickl\Matrix\Vector;
 
 readonly class Matrix
 {
     private array $columns;
+
     private array $index;
 
     public function __construct(
-        private array $matrix, 
+        private array $matrix,
         bool $check = true,
     ) {
         if ($check) {
@@ -39,8 +39,8 @@ readonly class Matrix
                 throw new Exception('Matrix rows must have same length');
             }
 
-            foreach($row as $entry) {
-                if(! is_int($entry) && ! is_float($entry) && ! is_null($entry)) {
+            foreach ($row as $entry) {
+                if (! is_int($entry) && ! is_float($entry) && ! is_null($entry)) {
                     throw new Exception('Matrix must contain only int, float, or null');
                 }
             }
@@ -155,24 +155,24 @@ readonly class Matrix
             }
         }
 
-        if(isset($this->columns)) {
-            foreach($this->columns as $name) {
+        if (isset($this->columns)) {
+            foreach ($this->columns as $name) {
                 $max = max($max, strlen((string) $name));
             }
         }
-        
-        if(isset($this->index)) {
-            foreach($this->index ?? [] as $name) {
+
+        if (isset($this->index)) {
+            foreach ($this->index ?? [] as $name) {
                 $max = max($max, strlen((string) $name));
             }
         }
 
         $string = '';
 
-        if(isset($this->columns)) {
+        if (isset($this->columns)) {
             $line = '';
 
-            foreach($this->columns as $name) {
+            foreach ($this->columns as $name) {
                 $pad = str_repeat(' ', $max - strlen((string) $name));
                 $line .= ($line === '' ? (isset($this->index) ? str_repeat(' ', $max + 1) : '') : ' ').$pad.$name;
             }
@@ -183,7 +183,7 @@ readonly class Matrix
         foreach ($this->matrix as $i => $row) {
             $line = '';
 
-            if(isset($this->index)) {
+            if (isset($this->index)) {
                 $row = [$this->index[$i], ...$row];
             }
 
@@ -302,11 +302,11 @@ readonly class Matrix
 
     public function vector(): Vector
     {
-        if($this->width() === 1) {
+        if ($this->width() === 1) {
             return new Vector($this->col(0), check: false);
         }
 
-        if($this->height() === 1) {
+        if ($this->height() === 1) {
             return new Vector($this->row(0), check: false);
         }
 
@@ -347,16 +347,16 @@ readonly class Matrix
 
     public function columns(?array $names = null): static|array
     {
-        if($names === null) {
+        if ($names === null) {
             return $this->columns;
         }
 
-        if(count($names) !== $this->width()) {
+        if (count($names) !== $this->width()) {
             throw new Exception('Column names have wrong size');
         }
 
-        foreach($names as $name) {
-            if(! is_int($name) && ! is_string($name)) {
+        foreach ($names as $name) {
+            if (! is_int($name) && ! is_string($name)) {
                 throw new Exception('Only int and string is allowed as column name');
             }
         }
@@ -368,16 +368,16 @@ readonly class Matrix
 
     public function index(?array $names = null): static|array
     {
-        if($names === null) {
+        if ($names === null) {
             return $this->index;
         }
 
-        if(count($names) !== $this->height()) {
+        if (count($names) !== $this->height()) {
             throw new Exception('Index names have wrong size');
         }
 
-        foreach($names as $name) {
-            if(! is_int($name) && ! is_string($name)) {
+        foreach ($names as $name) {
+            if (! is_int($name) && ! is_string($name)) {
                 throw new Exception('Only int and string is allowed as index name');
             }
         }
@@ -395,7 +395,7 @@ readonly class Matrix
 
         $vector = [];
 
-        for($i = 0; $i < $this->width(); $i++) {
+        for ($i = 0; $i < $this->width(); $i++) {
             $vector[] = $this->get($i, $i);
         }
 
@@ -404,13 +404,13 @@ readonly class Matrix
 
     public function cbind(Matrix $other): Matrix
     {
-        if($this->height() !== $other->height()) {
+        if ($this->height() !== $other->height()) {
             throw new Exception('Can only bind column of same length');
         }
 
         $lines = [];
 
-        for($i = 0; $i < $this->height(); $i++) {
+        for ($i = 0; $i < $this->height(); $i++) {
             $lines[] = [...$this->row($i), ...$other->row($i)];
         }
 
@@ -419,13 +419,13 @@ readonly class Matrix
 
     public function rbind(Matrix $other): Matrix
     {
-        if($this->width() !== $other->width()) {
+        if ($this->width() !== $other->width()) {
             throw new Exception('Can only bind row of same width');
         }
 
         $columns = [];
 
-        for($j = 0; $j < $this->width(); $j++) {
+        for ($j = 0; $j < $this->width(); $j++) {
             $columns[] = [...$this->col($j), ...$other->col($j)];
         }
 
