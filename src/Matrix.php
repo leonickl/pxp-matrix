@@ -277,7 +277,7 @@ readonly class Matrix
             $matrix[] = $line;
         }
 
-        return new Matrix($matrix, check: false);
+        return new static($matrix, check: false);
     }
 
     public function times(Matrix $other): Matrix
