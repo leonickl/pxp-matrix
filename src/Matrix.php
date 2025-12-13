@@ -33,6 +33,12 @@ readonly class Matrix
             if ($width !== count($row)) {
                 throw new Exception('Matrix rows must have same length');
             }
+
+            foreach($row as $entry) {
+                if(! is_int($entry) && ! is_float($entry) && ! is_null($entry)) {
+                    throw new Exception('Matrix must contain only int, float, or null');
+                }
+            }
         }
     }
 
@@ -56,7 +62,7 @@ readonly class Matrix
         return $this->height() === $this->width();
     }
 
-    public function get(int $row, int $col): float
+    public function get(int $row, int $col): int|float|null
     {
         if ($row >= $this->height()) {
             throw new Exception('Row index out of bounds');
