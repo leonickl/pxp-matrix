@@ -12,20 +12,10 @@ readonly class Matrix
 
     public function __construct(
         private array $matrix, 
-        bool $check = true, 
-        ?array $columns = null, 
-        ?array $index = null,
+        bool $check = true,
     ) {
         if ($check) {
             $this->check($matrix);
-        }
-
-        if($columns) {
-            $this->columns($columns);
-        }
-
-        if($index) {
-            $this->index($index);
         }
     }
 
@@ -410,5 +400,35 @@ readonly class Matrix
         }
 
         return new Vector($vector, check: false);
+    }
+
+    public function cbind(Matrix $other): Matrix
+    {
+        if($this->height() !== $other->height()) {
+            throw new Exception('Can only bind column of same length');
+        }
+
+        $lines = [];
+
+        for($i = 0; $i < $this->height(); $i++) {
+            $lines[] = [...$this->row($i), ...$other->row($i)];
+        }
+
+        return new Matrix($lines, check: false);
+    }
+
+    public function rbind(Matrix $other): Matrix
+    {
+        if($this->width() !== $other->width()) {
+            throw new Exception('Can only bind row of same width');
+        }
+
+        $columns = [];
+
+        for($j = 0; $j < $this->width(); $j++) {
+            $columns[] = [...$this->col($j), ...$other->col($j)];
+        }
+
+        return new Matrix($columns, check: false)->t();
     }
 }

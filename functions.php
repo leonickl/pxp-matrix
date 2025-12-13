@@ -3,9 +3,9 @@
 use LeoNickl\Matrix\Vector;
 use LeoNickl\Matrix\Matrix;
 
-function matrix(array $matrix, ?array $columns = null, ?array $index = null)
+function matrix(array $matrix, bool $check = true)
 {
-    return new Matrix($matrix, columns: $columns, index: $index);
+    return new Matrix($matrix, check: $check);
 }
 
 function vector(array $vector)
